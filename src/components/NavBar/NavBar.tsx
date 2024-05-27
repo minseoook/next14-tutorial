@@ -3,6 +3,7 @@ import Links from "./links/Links";
 import styles from "./NavBar.module.css";
 import Link from "next/link";
 const NavBar = () => {
+  console.log("하이");
   return (
     <div className={styles.container}>
       <Link href="/" className={styles.logo}>

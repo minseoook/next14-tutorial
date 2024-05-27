@@ -3,11 +3,13 @@ import styles from "./singleblog.module.css";
 
 import { Suspense } from "react";
 import { getPost } from "@/lib/data";
+import PostUser from "@/components/postUser/PostUser";
 
 // FETCH DATA WITH AN API
-const getData = async (slug) => {
+const getData = async (slug: string) => {
   const res = await fetch(`http://localhost:3000/api/blog/${slug}`);
 
+  console.log(res);
   if (!res.ok) {
     throw new Error("Something went wrong");
   }
@@ -15,18 +17,22 @@ const getData = async (slug) => {
   return res.json();
 };
 
-export const generateMetadata = async ({ params }) => {
-  const { slug } = params;
+// export const generateMetadata = async ({
+//   params,
+// }: {
+//   params: { slug: string };
+// }) => {
+//   const { slug } = params;
 
-  const post = await getPost(slug);
+//   const post = await getPost(slug);
 
-  return {
-    title: post.title,
-    description: post.desc,
-  };
-};
+//   return {
+//     title: post?.title,
+//     description: post?.desc,
+//   };
+// };
 
-const SinglePostPage = async ({ params }) => {
+const SinglePostPage = async ({ params }: { params: { slug: string } }) => {
   const { slug } = params;
 
   // FETCH DATA WITH AN API
@@ -39,23 +45,22 @@ const SinglePostPage = async ({ params }) => {
     <div className={styles.container}>
       {post.img && (
         <div className={styles.imgContainer}>
-          <Image src={post.img} alt="" fill className={styles.img} />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Image src={post?.img} alt="" fill className={styles.img} />
+          </Suspense>
         </div>
       )}
       <div className={styles.textContainer}>
         <h1 className={styles.title}>{post.title}</h1>
         <div className={styles.detail}>
-          {/* {post && (
+          {post && (
             <Suspense fallback={<div>Loading...</div>}>
-              <PostUser
-               userId={post.userId} />
+              <PostUser userId={post.userId} />
             </Suspense>
-          )} */}
+          )}
           <div className={styles.detailText}>
             <span className={styles.detailTitle}>Published</span>
-            <span className={styles.detailValue}>
-              {post.createdAt.toString().slice(4, 16)}
-            </span>
+            <span className={styles.detailValue}>{Date.now()}</span>
           </div>
         </div>
         <div className={styles.content}>{post.desc}</div>

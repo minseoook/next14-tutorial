@@ -2,7 +2,17 @@ import Image from "next/image";
 import styles from "./postcard.module.css";
 import Link from "next/link";
 
-const PostCard = ({ post }) => {
+type Props = {
+  post: {
+    _id: string;
+    userId: string;
+    title: string;
+    desc: string;
+    slug: string;
+    img: string;
+  };
+};
+const PostCard = ({ post }: Props) => {
   return (
     <div className={styles.container}>
       <div className={styles.top}>
@@ -11,13 +21,11 @@ const PostCard = ({ post }) => {
             <Image src={post.img} alt="" fill className={styles.img} />
           </div>
         )}
-        <span className={styles.date}>
-          {post.createdAt?.toString().slice(4, 16)}
-        </span>
+        <span className={styles.date}>{Date.now()}</span>
       </div>
       <div className={styles.bottom}>
         <h1 className={styles.title}>{post.title}</h1>
-        <p className={styles.desc}>{post.body}</p>
+        <p className={styles.desc}>{post.desc}</p>
         <Link className={styles.link} href={`/blog/${post.slug}`}>
           READ MORE
         </Link>

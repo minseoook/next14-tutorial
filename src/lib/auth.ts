@@ -35,4 +35,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  pages: {
+    signIn: "/login", // 커스텀 로그인 페이지
+    // 다른 페이지 구성 가능
+  },
 });

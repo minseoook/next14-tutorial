@@ -1,25 +1,33 @@
+"use client";
+
 import Link from "next/link";
 import React from "react";
 import styles from "./Links.module.css";
 import NavLink from "./navLink/NavLink";
-const Links = () => {
-  const session = true;
-  const isAdmin = true;
+import { Session } from "next-auth";
+import { signOut } from "next-auth/react";
+
+const Links = ({ session }: Session) => {
   const links = [
     { title: "HomePage", path: "/" },
     { title: "About", path: "/about" },
     { title: "Contact", path: "/contact" },
     { title: "Blog", path: "/blog" },
   ];
+  const onLogout = () => {
+    signOut();
+  };
+
   return (
     <div className={styles.links}>
       {links.map((link) => (
         <NavLink item={link} key={link.title} />
       ))}
-      {session ? (
+      {session?.user ? (
         <>
-          {isAdmin && <NavLink item={{ title: "Admin", path: "/admin" }} />}
-          <button className={styles.logout}>로그아웃</button>
+          <button className={styles.logout} onClick={onLogout}>
+            로그아웃
+          </button>
         </>
       ) : (
         <NavLink item={{ title: "Login", path: "/login" }} />
